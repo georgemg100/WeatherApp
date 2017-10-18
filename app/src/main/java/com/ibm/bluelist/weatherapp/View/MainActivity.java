@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements PresenterViewCont
     private static final int REQUEST_CODE = 1;
     Presenter presenter;
     ProgressBar progressBar;
-    EditText editTextSearch;
     TextView temperature;
     TextView highTemperature;
     TextView lowTemperature;
@@ -44,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements PresenterViewCont
 
         //init views
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        editTextSearch = (EditText) findViewById(R.id.editTextSearch);
         temperature = (TextView) findViewById(R.id.textViewTemp);
         highTemperature = (TextView) findViewById(R.id.textViewHigh);
         lowTemperature = (TextView) findViewById(R.id.textViewLow);
@@ -58,15 +55,6 @@ public class MainActivity extends AppCompatActivity implements PresenterViewCont
 
     public void searchCity(View view) {
         startActivityForResult(new Intent(this, SearchCityActivity.class), REQUEST_CODE);
-        //dismiss keyboard
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
-
-        //set progress indicator and load weather
-        presenter.loadWeather(editTextSearch.getText().toString());
     }
 
     @Override
