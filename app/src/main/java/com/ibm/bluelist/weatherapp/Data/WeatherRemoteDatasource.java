@@ -3,7 +3,7 @@ package com.ibm.bluelist.weatherapp.Data;
 import android.graphics.Bitmap;
 
 import com.ibm.bluelist.weatherapp.Data.Model.Forecast;
-import com.ibm.bluelist.weatherapp.View.MainApplication;
+import com.ibm.bluelist.weatherapp.Weather.MainApplication;
 import com.ibm.bluelist.weatherapp.Data.Model.Weather;
 import com.squareup.picasso.Picasso;
 

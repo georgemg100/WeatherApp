@@ -1,12 +1,10 @@
-package com.ibm.bluelist.weatherapp.View;
+package com.ibm.bluelist.weatherapp.Weather;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,8 +12,8 @@ import android.widget.Toast;
 
 import com.ibm.bluelist.weatherapp.Data.Model.Forecast;
 import com.ibm.bluelist.weatherapp.Data.Model.Weather;
-import com.ibm.bluelist.weatherapp.Presenter.Presenter;
-import com.ibm.bluelist.weatherapp.Presenter.PresenterViewContract;
+import com.ibm.bluelist.weatherapp.Weather.Presenter;
+import com.ibm.bluelist.weatherapp.Weather.PresenterViewContract;
 import com.ibm.bluelist.weatherapp.R;
 import com.ibm.bluelist.weatherapp.Search.SearchCityActivity;
 

@@ -1,4 +1,4 @@
-package com.ibm.bluelist.weatherapp.Presenter;
+package com.ibm.bluelist.weatherapp.Weather;
 
 import com.ibm.bluelist.weatherapp.Data.Model.Weather;
 

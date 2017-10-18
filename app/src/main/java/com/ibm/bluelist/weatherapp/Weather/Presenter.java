@@ -1,4 +1,4 @@
-package com.ibm.bluelist.weatherapp.Presenter;
+package com.ibm.bluelist.weatherapp.Weather;
 
 import android.os.Handler;
 import android.os.Looper;

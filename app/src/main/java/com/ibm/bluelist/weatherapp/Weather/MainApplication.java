@@ -1,4 +1,4 @@
-package com.ibm.bluelist.weatherapp.View;
+package com.ibm.bluelist.weatherapp.Weather;
 
 import android.app.Application;
 import android.content.Context;
