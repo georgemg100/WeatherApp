@@ -10,12 +10,12 @@ public interface PresenterViewContract {
     interface Presenter {
         void loadWeather(String city);
         void loadLastSearched();
-        void showWeather(Weather weather);
-        void showError(String message);
     }
 
     interface View {
         void showWeather(Weather weather);
         void showError(String message);
+        void showSpinner();
+        void dismissSpinner();
     }
 }

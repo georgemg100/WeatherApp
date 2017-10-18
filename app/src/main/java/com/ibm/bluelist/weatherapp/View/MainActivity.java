@@ -1,6 +1,8 @@
 package com.ibm.bluelist.weatherapp.View;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +18,14 @@ import com.ibm.bluelist.weatherapp.Data.Model.Weather;
 import com.ibm.bluelist.weatherapp.Presenter.Presenter;
 import com.ibm.bluelist.weatherapp.Presenter.PresenterViewContract;
 import com.ibm.bluelist.weatherapp.R;
+import com.ibm.bluelist.weatherapp.Search.SearchCityActivity;
 
 /**
  * Passively displays data forwarded from the presenter. Receives a Weather object from the presenter,
  * parses and displays the data. All of the implemented methods are called by the Presenter
  */
 public class MainActivity extends AppCompatActivity implements PresenterViewContract.View {
+    private static final int REQUEST_CODE = 1;
     Presenter presenter;
     ProgressBar progressBar;
     EditText editTextSearch;
@@ -48,13 +52,12 @@ public class MainActivity extends AppCompatActivity implements PresenterViewCont
         iconConditions = (ImageView) findViewById(R.id.iconConditions);
         cityName = (TextView) findViewById(R.id.textViewCityName);
 
-        progressBar.setVisibility(View.VISIBLE);
-
         presenter = new Presenter(this);
         presenter.loadLastSearched();
     }
 
     public void searchCity(View view) {
+        startActivityForResult(new Intent(this, SearchCityActivity.class), REQUEST_CODE);
         //dismiss keyboard
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -63,15 +66,12 @@ public class MainActivity extends AppCompatActivity implements PresenterViewCont
                 InputMethodManager.HIDE_NOT_ALWAYS);
 
         //set progress indicator and load weather
-        progressBar.setVisibility(View.VISIBLE);
         presenter.loadWeather(editTextSearch.getText().toString());
     }
 
     @Override
     public void showWeather(Weather weather) {
-        progressBar.setVisibility(View.INVISIBLE);
         Forecast currentForecast = weather.getForecasts().get(0); //get 1st entry from five day forecast
-
         temperature.setText(Integer.toString(currentForecast.getCurrentTemp()) + "˚F");
         highTemperature.setText("High: " + Integer.toString(currentForecast.getHigh()) + "˚F");
         lowTemperature.setText("Low: " + Integer.toString(currentForecast.getLow()) + "˚F");
@@ -83,8 +83,31 @@ public class MainActivity extends AppCompatActivity implements PresenterViewCont
 
     @Override
     public void showError(String message) {
-        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void showSpinner() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void dismissSpinner() {
+        progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == REQUEST_CODE && data != null) {
+            temperature.setText(Integer.toString(data.getExtras().getInt("currentTemp")) + "˚F");
+            highTemperature.setText("High: " + Integer.toString(data.getExtras().getInt("high")) + "˚F");
+            lowTemperature.setText("Low: " + Integer.toString(data.getExtras().getInt("low")) + "˚F");
+            conditions.setText(data.getExtras().getString("conditions"));
+            iconConditions.setImageBitmap((Bitmap) data.getExtras().get("iconBitmap"));
+            iconConditions.setVisibility(View.VISIBLE);
+            cityName.setText(data.getExtras().getString("city"));
+
+        }
+    }
 }

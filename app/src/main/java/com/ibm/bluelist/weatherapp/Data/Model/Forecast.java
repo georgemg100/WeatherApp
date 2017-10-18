@@ -3,6 +3,8 @@ package com.ibm.bluelist.weatherapp.Data.Model;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import org.json.JSONObject;
 
@@ -76,4 +78,6 @@ public class Forecast {
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
     }
+
+
 }

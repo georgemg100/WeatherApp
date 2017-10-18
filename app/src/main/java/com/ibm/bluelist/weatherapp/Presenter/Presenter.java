@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import com.ibm.bluelist.weatherapp.AppUtils;
 import com.ibm.bluelist.weatherapp.Data.Model.Weather;
+import com.ibm.bluelist.weatherapp.Data.WeatherDataSource;
 import com.ibm.bluelist.weatherapp.Data.WeatherRepository;
 
 /**
@@ -17,16 +18,41 @@ import com.ibm.bluelist.weatherapp.Data.WeatherRepository;
 public class Presenter implements PresenterViewContract.Presenter {
     WeatherRepository repository;
     PresenterViewContract.View view;
+    Weather weather;
 
     public Presenter(PresenterViewContract.View view) {
         this.view = view;
-        repository = new WeatherRepository(this);
+        repository = WeatherRepository.getInstance();
     }
 
     @Override
     public void loadWeather(String city) {
         if(AppUtils.isValidCityName(city)) {
-            repository.fetchWeather(city);
+            view.showSpinner();
+            repository.fetchWeather(city, new WeatherDataSource.LoadWeatherCallback() {
+
+                @Override
+                public void onWeatherLoaded(final Weather weather) {
+                    runOnUIThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.dismissSpinner();
+                            view.showWeather(weather);
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onDataNotAvailable(final String message) {
+                    runOnUIThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            view.showError(message);
+                        }
+                    });
+                }
+            } );
         } else {
             view.showError("Please enter a city name!");
         }
@@ -34,27 +60,30 @@ public class Presenter implements PresenterViewContract.Presenter {
 
     @Override
     public void loadLastSearched() {
-        repository.loadLastSearched();
-    }
-
-    @Override
-    public void showWeather(final Weather weather) {
-        runOnUIThread(new Runnable() {
+        view.showSpinner();
+        repository.loadLastSearched(new WeatherDataSource.LoadWeatherCallback() {
             @Override
-            public void run() {
-                view.showWeather(weather);
+            public void onWeatherLoaded(final Weather weather) {
+                runOnUIThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.dismissSpinner();
+                        view.showWeather(weather);
+                    }
+                });
             }
-        });
-    }
 
-    @Override
-    public void showError(final String message) {
-        runOnUIThread(new Runnable() {
             @Override
-            public void run() {
-                view.showError(message);// code to interact with UI
+            public void onDataNotAvailable(final String message) {
+                runOnUIThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.showError(message);
+                    }
+                });
+
             }
-        });
+        } );
     }
 
     public void runOnUIThread(Runnable task) {

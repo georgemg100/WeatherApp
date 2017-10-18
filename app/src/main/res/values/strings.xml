@@ -3,4 +3,5 @@
     <string name="weather_api_key">fa0034eeccb77ad403ed51eea01b24f0</string>
     <string name="title_activity_search">Search</string>
     <string name="search_hint">Add a city</string>
+    <string name="title_activity_search_city">SearchCityActivity</string>
 </resources>
